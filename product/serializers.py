@@ -5,6 +5,8 @@ from .models import Category, Product
 
 class ProductSerializer(serializers.ModelSerializer):
 
+    get_image = serializers.SerializerMethodField('image_url')
+
     class Meta:
         model = Product
         fields = (
@@ -13,9 +15,13 @@ class ProductSerializer(serializers.ModelSerializer):
             "get_absolute_url",
             "description",
             "price",
+            "image",
             "get_image",
             "get_thumbnail"
-        )    
+        )
+        def image_url(self, obj):
+            request = self.context.get("request")
+            return request.build_absolute_uri(obj.image.url)
 
 class CategorySerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True)

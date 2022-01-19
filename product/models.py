@@ -38,11 +38,6 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return f'/{self.category.slug}/{self.slug}/'
-    
-    def get_image(self, obj):
-        request = self.context.get('request')
-        get_image_uri = obj.image.url
-        return request.build_absolute_uri(get_image_uri)
 
     def get_thumbnail(self):
         if self.thumbnail:
