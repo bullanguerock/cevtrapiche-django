@@ -5,9 +5,13 @@ from .models import Category, Product
 
 class ProductSerializer(serializers.ModelSerializer):
 
-    get_image = serializers.SerializerMethodField('image_url')
-    get_thumbnail = serializers.SerializerMethodField('thumbnail_url')
-
+    try:
+        get_image = serializers.SerializerMethodField('image_url')
+        get_thumbnail = serializers.SerializerMethodField('thumbnail_url')
+    except:
+        print('no context')
+        get_image = ''
+        get_thumbnail = ''
 
     class Meta:
         model = Product
