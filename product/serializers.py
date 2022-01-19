@@ -18,9 +18,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "get_image",
             "get_thumbnail"
         )
-        def image_url(self, obj):
-            request = self.context.get("request")
-            return request.build_absolute_uri(obj.image.url)
+    def image_url(self, obj):
+        request = self.context.get("request")
+        return request.build_absolute_uri(obj.image.url)
 
 class CategorySerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True)
