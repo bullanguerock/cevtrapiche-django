@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://cevtrapiche-vue.herokuapp.com/',
+    'https://cevtrapiche-vue.herokuapp.com',
 ]
 
 MIDDLEWARE = [
