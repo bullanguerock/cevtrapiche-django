@@ -41,7 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
         
 
 class CategorySerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True)
+    products = ProductSerializer()
 
     class Meta:
         model = Category
