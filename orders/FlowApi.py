@@ -36,8 +36,8 @@ def flow_payment(amount, order):
         'subject': "Test charge from Dbeers",
         'amount': amount,
         'email' : 'toto.palacios.a@gmail.com',
-        'urlConfirmation': 'http://localhost:8000/api/v1/confirmation/',
-        'urlReturn': 'http://localhost:8000/api/v1/confirmation/',
+        'urlConfirmation': 'https://cevtrapiche-django.herokuapp.com/api/v1/confirmation/',
+        'urlReturn': 'https://cevtrapiche-django.herokuapp.com/api/v1/confirmation/',
     }
 
     s = sign(secret_key, params)
