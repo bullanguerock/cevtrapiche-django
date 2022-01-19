@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uj#&9vf%sp52lwar68#=wd*%1=lmn&9u!b3=8!fakx%_q0y+sm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://cevtrapiche-django.herokuapp.com/']
 
 FLOW_SECRET_KEY = '523ffbf4a580332ec97c58cd55e4cf1fb0e06791'
 
