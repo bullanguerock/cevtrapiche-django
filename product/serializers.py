@@ -6,7 +6,7 @@ from .models import Category, Product
 class ProductSerializer(serializers.ModelSerializer):
 
     get_image = serializers.SerializerMethodField('image_url')
-    thumbnail = serializers.SerializerMethodField('thumbnail_url')
+    get_thumbnail = serializers.SerializerMethodField('thumbnail_url')
 
 
     class Meta:
