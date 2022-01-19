@@ -71,7 +71,7 @@ def confirmation(request):
             'token': token
         }
         
-        return redirect('https://cevtrapiche-django.herokuapp.com/cart/confirmation?token='+f'{token}'+'&status='+f'{status_data}')
+        return redirect('https://cevtrapiche-vue.herokuapp.com/cart/confirmation?token='+f'{token}'+'&status='+f'{status_data}')
     except Exception:
         print('exception status post')
         return Response(status=status.HTTP_400_BAD_REQUEST)
