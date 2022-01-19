@@ -26,7 +26,7 @@ class ProductDetail(APIView):
     
     def get(self, request, category_slug, product_slug, format=None):
         product = self.get_object(category_slug, product_slug)
-        serializer = ProductSerializer(product)
+        serializer = ProductSerializer(product, context={'request': request})
         return Response(serializer.data)
 
 class CategoryDetail(APIView):
@@ -47,7 +47,7 @@ def search(request):
 
     if query:
         products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-        serializer = ProductSerializer(products, many=True)
+        serializer = ProductSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)
     else:
         return Response({"products": []})
