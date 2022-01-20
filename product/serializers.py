@@ -45,8 +45,8 @@ class ProductSerializer(serializers.ModelSerializer):
         
 
 class CategorySerializer(serializers.ModelSerializer):
-    rqs = serializers.SerializerMethodField('get_request')
-    products = ProductSerializer(context={'request': rqs})
+
+    products = ProductSerializer()
 
     class Meta:
         model = Category
@@ -56,6 +56,5 @@ class CategorySerializer(serializers.ModelSerializer):
             "get_absolute_url",
             "products",
         )
-    def get_request(self):
-        rq = self.context.get("request")
-        return rq
+
+
