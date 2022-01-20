@@ -44,7 +44,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
         
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
     products = ProductSerializer()
 
