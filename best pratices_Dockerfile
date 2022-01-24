@@ -1,0 +1,22 @@
+FROM python:3.9.10-alpine3.15
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /requirements.txt
+COPY ./app /app
+
+WORKDIR /app
+EXPOSE 8000
+
+# install psycopg2 dependencies
+RUN apk update
+RUN apk add postgresql-dev gcc python3-dev musl-dev
+
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    /py/bin/pip install -r /requirements.txt && \
+    adduser --disabled-password --nocreate-home app
+
+ENV PATH="/py/bin:$PATH"
+
+USER app
