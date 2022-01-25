@@ -15,7 +15,6 @@ from .serializers import OrderSerializer, MyOrderSerializer
 
 from .FlowApi import get_status, flow_payment
 
-
 @api_view(['POST'])
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
@@ -70,8 +69,9 @@ def confirmation(request):
             'status': status_data,
             'token': token
         }
+        url ='http://localhost:8080/cart/confirmation?token='+f'{token}'+'&status='+f'{status_data}'
         
-        return redirect('https://cevtrapiche-vue.herokuapp.com/cart/confirmation?token='+f'{token}'+'&status='+f'{status_data}')
+        return redirect(url)
     except Exception:
         print('exception status post')
         return Response(status=status.HTTP_400_BAD_REQUEST)

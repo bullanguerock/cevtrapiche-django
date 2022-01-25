@@ -3,7 +3,6 @@ import requests
 import hashlib
 import hmac
 
-
 def get_status(token)->str:
     base_url = 'https://sandbox.flow.cl/api/'
     secret_key = "523ffbf4a580332ec97c58cd55e4cf1fb0e06791"
@@ -37,8 +36,8 @@ def flow_payment(amount, order):
         'subject': "Test charge from Dbeers",
         'amount': amount,
         'email' : 'toto.palacios.a@gmail.com',
-        'urlConfirmation': 'https://cevtrapiche-django.herokuapp.com/api/v1/confirmation/',
-        'urlReturn': 'https://cevtrapiche-django.herokuapp.com/api/v1/confirmation/',
+        'urlConfirmation': 'http://localhost:8000/api/v1/confirmation/',
+        'urlReturn': 'http://localhost:8000/api/v1/confirmation/',
     }
 
     s = sign(secret_key, params)

@@ -23,7 +23,7 @@ RUN pip install -r requirements.txt
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
 RUN apt-get install dos2unix && dos2unix ./entrypoint.sh
-#RUN sed -i -e 's/\r$//' /usr/local/bin/entrypoint.sh
+RUN sed -i -e 's/\r$//' ./entrypoint.sh
 RUN chmod u+x ./entrypoint.sh
 
 # copy project
