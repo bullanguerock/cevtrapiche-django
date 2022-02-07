@@ -13,7 +13,6 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(' ')
 
 CORS_ALLOWED_ORIGINS = os.getenv("DJANGO_ALLOWED_CORS").split(' ')
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 

@@ -1,10 +1,10 @@
+
 from urllib import request
 from rest_framework import serializers
 
 from .models import Category, Product
 
 class ProductSerializer(serializers.ModelSerializer):
-
     try:
         get_image = serializers.SerializerMethodField('image_url')
         get_thumbnail = serializers.SerializerMethodField('thumbnail_url')
@@ -22,19 +22,23 @@ class ProductSerializer(serializers.ModelSerializer):
             "description",
             "price",
             "get_image",
-            "get_thumbnail"
+            "get_thumbnail",
+            "inventory"
         )
     def image_url(self, obj):
         request = self.context.get("request")
-        return request.build_absolute_uri(obj.image.url)
+        if request:
+            return request.build_absolute_uri(obj.image.url)
+        else:
+            return ''
 
     def thumbnail_url(self, obj):
         request = self.context.get("request")
 
-        if obj.thumbnail:
+        if obj.thumbnail and request:
             return request.build_absolute_uri(obj.thumbnail.url)
         else:
-            if obj.image:
+            if obj.image and request:
                 obj.thumbnail = obj.make_thumbnail(obj.image)
                 obj.save()
 

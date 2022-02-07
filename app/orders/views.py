@@ -21,7 +21,8 @@ from .FlowApi import get_status, flow_payment
 def checkout(request):
     data = request.data
     serializer = OrderSerializer(data=data)
-    
+
+    #print(data)    
 
     if serializer.is_valid():
         print('serializer valid')       
@@ -29,16 +30,18 @@ def checkout(request):
         
         try:                  
             serializer.save(user=request.user, paid_amount=paid_amount)
+            orderid = serializer.data['id']
+            data_dict = flow_payment(paid_amount, orderid)
 
-            order = serializer.data['id']
-            data_dict = flow_payment(paid_amount, order)
-            print(data_dict) 
-            
-            print(data_dict['redirect_url'])
+            flow = str(data_dict['flow_order'])
+
+            order = Order.objects.get(id=orderid)
+            order.flow_token = flow
+            order.save(update_fields=['flow_token'])            
 
             return Response(data_dict['redirect_url'], status=status.HTTP_201_CREATED)
+
         except Exception:
-            print('exception posiblemente numero de orden repetida')
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                 
     print('serializer invalid')
@@ -54,30 +57,63 @@ class OrdersList(APIView):
         serializer = MyOrderSerializer(orders, many=True)
         return Response(serializer.data)
 
+class OrderManipulate(APIView):
+    def get_object(self, pk):
+        try:
+            return Order.objects.get(id=pk)
+        except Order.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        product = self.get_object(pk)
+        serializer = OrderSerializer(product)  
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk=pk)
+        print('object geted')
+
+        if request.data:
+            snippet.status = request.data['status']
+            snippet.save(update_fields=['status'])
+            return Response(status=status.HTTP_200_OK) 
+        
+
+        #serializer = OrderSerializer(snippet, data=request.data)
+        #if serializer.is_valid():
+        #    print('update order ready')
+        #    serializer.save()
+        #    return Response(serializer.data, status=status.HTTP_200_OK)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk, format=None):
+        product = self.get_object(pk)
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 @api_view(['POST'])
 def confirmation(request):
     try:
         data = request.data
-        #print(data)
         
-        token = data['token'] 
+       
+        token = data['token']         
         response = get_status(token)
-        status_data = response
-        print(status_data, token)
 
-        params = {
-            'status': status_data,
-            'token': token
-        }
+        status_data = response['status']
+        print(status_data, token)       
+
         url ='http://localhost:8080/cart/confirmation?token='+f'{token}'+'&status='+f'{status_data}'
-        
+        print(url)
         return redirect(url)
+
     except Exception:
-        print('exception status post')
+        print('payment confirmation error')
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-def getStatus(request):    
+def getStatus(request):
     result = request.data      
     try:
         status_order = get_status(result['token'])
@@ -85,7 +121,9 @@ def getStatus(request):
         data = {
             'status_order': status_order
         }
+
         return Response(data, status=status.HTTP_200_OK)
     except Exception:
         print('exception status get')
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)     
+    
