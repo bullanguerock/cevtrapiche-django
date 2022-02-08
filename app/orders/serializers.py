@@ -39,9 +39,10 @@ class MyOrderSerializer(serializers.ModelSerializer):
             "zipcode",
             "place",
             "phone",
-            #"flow_token",
+            "flow_token",
             "items",
-            "paid_amount"
+            "paid_amount",
+            "status"
         )
 
 class OrderItemSerializer(serializers.ModelSerializer):    
@@ -67,8 +68,9 @@ class OrderSerializer(serializers.ModelSerializer):
             "zipcode",
             "place",
             "phone",
-            #"flow_token",
+            "flow_token",
             "items",
+            "status",
         )
     
     def create(self, validated_data):

@@ -7,13 +7,15 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import generics
+from rest_framework import status
 
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 
 class LatestProductsList(APIView):
     def get(self, request, format=None):
-        products = Product.objects.all()[0:4]
+        products = (Product.objects.filter(inventory__gt=0))[0:4]
         serializer = ProductSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -51,3 +53,32 @@ def search(request):
         return Response(serializer.data)
     else:
         return Response({"products": []})
+
+class ProductManipulate(APIView):
+    def get_object(self, pk):
+        try:
+            return Product.objects.get(id=pk)
+        except Product.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        product = self.get_object(pk)
+        serializer = ProductSerializer(product)  
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk=pk)
+        print('object geted')
+        serializer = ProductSerializer(snippet, data=request.data)
+        if serializer.is_valid():
+            print('update serial ready')
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk, format=None):
+        product = self.get_object(pk)
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+

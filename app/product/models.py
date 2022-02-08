@@ -1,4 +1,6 @@
+from email.policy import default
 from io import BytesIO
+from pyexpat import model
 from PIL import Image
 
 from django.core.files import File
@@ -25,10 +27,11 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=6, decimal_places=0, default=999999)
     image = models.ImageField(upload_to='uploads/', default='productPlaceholder.jpg')
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    inventory = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-date_added',)
@@ -38,6 +41,9 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return f'/{self.category.slug}/{self.slug}/'
+    
+    def has_inventory(self):
+        return self.inventory > 0 # True or False
     
     def make_thumbnail(self, image, size=(300, 200)):
         img = Image.open(image)

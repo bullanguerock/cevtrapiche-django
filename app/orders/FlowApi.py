@@ -20,7 +20,7 @@ def get_status(token)->str:
 
     response = requests.get(url, params)
 
-    data = response.json()['status']
+    data = response.json()
     #print(data)
     return data
 
@@ -31,8 +31,8 @@ def flow_payment(amount, order):
     secret_key = "523ffbf4a580332ec97c58cd55e4cf1fb0e06791"
     params = {
         'apiKey': "4EAAFAC5-6F1A-4855-88E2-9A2DE6934L1D",
-        #'commerceOrder': str(order*2),
-        'commerceOrder': order,
+        'commerceOrder': str(order*8),
+        #'commerceOrder': order,
         'subject': "Test charge from Dbeers",
         'amount': amount,
         'email' : 'toto.palacios.a@gmail.com',
@@ -55,11 +55,11 @@ def flow_payment(amount, order):
     if status == 200:
         json = response.json()
         redirect_url = json['url'] + '?token=' + json['token']
-        flow_order = json['flowOrder']
+        flow_token = json['token']
 
         dict = {
             'redirect_url': redirect_url,
-            'flow_order': flow_order
+            'flow_order': flow_token
         }
 
         return (dict)
