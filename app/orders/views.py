@@ -10,6 +10,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django.db.models import Q
+
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, MyOrderSerializer
 
@@ -54,7 +56,8 @@ class OrdersList(APIView):
 
     def get(self, request, format=None):
         orders = Order.objects.filter(user=request.user)
-        serializer = MyOrderSerializer(orders, many=True)
+        valid = orders.filter(Q(status='pendiente') | Q(status='rechazada') | Q(status='anulada') | Q(status='pagada'))
+        serializer = MyOrderSerializer(valid, many=True)
         return Response(serializer.data)
 
 class OrderManipulate(APIView):

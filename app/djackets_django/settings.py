@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'djoser',
     'product',
     'orders',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +146,7 @@ DATABASES['default'].update(db_from_env)
 
 #import django_heroku
 #django_heroku.settings(locals())
+
+
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = 'django-cache'

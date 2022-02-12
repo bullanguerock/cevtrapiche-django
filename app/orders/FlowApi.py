@@ -31,13 +31,14 @@ def flow_payment(amount, order):
     secret_key = "523ffbf4a580332ec97c58cd55e4cf1fb0e06791"
     params = {
         'apiKey': "4EAAFAC5-6F1A-4855-88E2-9A2DE6934L1D",
-        'commerceOrder': str(order*8),
+        'commerceOrder': str(order*500),
         #'commerceOrder': order,
         'subject': "Test charge from Dbeers",
         'amount': amount,
         'email' : 'toto.palacios.a@gmail.com',
         'urlConfirmation': 'http://localhost:8000/api/v1/confirmation/',
         'urlReturn': 'http://localhost:8000/api/v1/confirmation/',
+        'timeout' : 3600
     }
 
     s = sign(secret_key, params)
