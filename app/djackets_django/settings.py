@@ -123,10 +123,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+MEDIA_ROOT = os.path.join(BASE_DIR / 'app/media')
+MEDIA_URL = 'media/'
+
+
 STATIC_URL = 'static/'
-MEDIA_URL = '/app/media/'
-MEDIA_ROOT = BASE_DIR / 'app/media'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
+
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
@@ -150,3 +153,18 @@ DATABASES['default'].update(db_from_env)
 
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = 'django-cache'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+}
